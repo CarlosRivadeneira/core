@@ -13,7 +13,6 @@ searchField.addEventListener("keyup", (e) => {
   if (searchValue.trim().length > 0) {
     paginationContainer.style.display = "none";
     tbody.innerHTML="";
-    console.log("searchValue", searchValue);
 
     fetch("/search-expenses", {
       body: JSON.stringify({ searchText: searchValue }),
@@ -21,7 +20,6 @@ searchField.addEventListener("keyup", (e) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(searchText);
         console.log("data", data);
 
         appTable.style.display = "none";

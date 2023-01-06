@@ -31,13 +31,25 @@ const renderChart = (data, labels) => {
     options: {
       title: {
         display: true,
-        text: "Expenses per category",
+        text: "Gastos por categoria",
       },
     },
   });
 };
 
+
 const getChartData = () => {
+  let valst;
+  let budg=0;
+  fetch("/inicio-bdg")
+  .then((rest) => rest.json())
+  .then((values) => {
+    console.log("values", values);
+    const [vals] = [Object.values(values)];
+      console.log(vals[0].amount);
+      valst=vals[0].amount
+  });
+
   console.log("fetching");
   fetch("/expense_category_summary")
     .then((res) => res.json())
@@ -48,16 +60,22 @@ const getChartData = () => {
         Object.keys(category_data),
         Object.values(category_data),
       ];
+      console.log([labels, data])
 
       console.log(results.expense_category_data);
       console.log(category_data);
 
       renderChart(data, labels);
 
+      let art=``;
       let div=``;
       let av=``;
+      let perc=``;
       labels.forEach((y,index)=>{
         console.log(data[index])
+        console.log(valst);
+        perc = (data[index] * 100) / valst
+        console.log(perc)
         if (data[index] > 4)
           av+=`
           <div class="feature col">
@@ -79,7 +97,16 @@ const getChartData = () => {
           <p>${data[index]}</p>
         </div>
         `;
+        if ((data[index]) < valst)
+          art+=`
+          <p> Se puede </p>
+          `;
+        else
+          art+=`
+          <p> No se puede </p>
+          `;
       });
+      vbocategory.innerHTML = art;
       cbcb.innerHTML = av;
       cbocategory.innerHTML = div;
     });

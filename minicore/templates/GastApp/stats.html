@@ -24,22 +24,14 @@
   
 
 
-  <div class="card mt-3">
+  <div class="card">
     <div class="card-body">
         <form action="{% url 'add-budget' %}" method="POST">
         {% csrf_token %}
         {% include 'partials/_messages.html' %}
         <div class="form-group">
             <label for="">Cantidad</label>
-            <input type="number" class="form-control form-control-sm" name="budget" value="{{values.budget}}">
-        </div>
-        <div class="form-group">
-            <label for="">Categoria</label>
-            <select class="form-control" name="category">
-                {% for category in categories %}
-                <option name="category" value="{{category.name}}">{{category.name}}</option>
-                {% endfor %}
-            </select>
+            <input type="number" class="form-control form-control-sm" name="amount" value="{{values.amount}}">
         </div>
     </div>
 
@@ -54,6 +46,9 @@
     
   </div>
   <div class="row g-4 row-cols-1 row-cols-lg-3" id="cbcb">
+
+  </div>
+  <div class="row g-4 row-cols-1 row-cols-lg-3" id="vbocategory">
 
   </div>
 
