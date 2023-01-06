@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'GastApp',
     'userpreferences',
-    'userincome'
+    'userincome',
+    'userbudget',
 ]
 
 MIDDLEWARE = [

@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Expense, Category, Budget
+from .models import Expense, Category
+from userbudget.models import Budget
 
 # Register your models here.
 

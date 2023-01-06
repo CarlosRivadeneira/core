@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Category, Expense, Budget
+from .models import Category, Expense
+from userbudget.models import Budget
 from django.contrib import messages
 from django.core.paginator import Paginator
 import json
@@ -11,20 +12,6 @@ import csv
 # Create your views here.
 
 def search_expenses(request):
-    if request.method=="POST":
-        search_str=json.loads(request.body).get('searchText')
-
-        expenses=Expense.objects.filter(
-            amount__istartswith=search_str, owner=request.user) | Expense.objects.filter(
-            date__istartswith=search_str, owner=request.user) | Expense.objects.filter(
-            description__icontains=search_str, owner=request.user) | Expense.objects.filter(
-            category__icontains=search_str, owner=request.user)
-
-        data=expenses.values()
-
-        return JsonResponse(list(data), safe=False)
-
-def search_budget(request):
     if request.method=="POST":
         search_str=json.loads(request.body).get('searchText')
 
@@ -134,8 +121,8 @@ def delete_expense(request, id):
 def expense_category_summary(request):
     todays_date=datetime.date.today()
     six_months_ago=todays_date-datetime.timedelta(days=30*6)
-    expenses=Expense.objects.filter(owner=request.user,date__gte=six_months_ago,date__lte=todays_date)
-    budgets=Budget.objects.all()
+    expenses=Expense.objects.filter(owner=request.user,date__gte=six_months_ago,date__lte=todays_date)  
+    
     finalrep={}
 
     def get_category(expense):
@@ -190,7 +177,7 @@ def add_budget(request):
             messages.error(request, 'Se requiere el ingreso de una cantidad')
             return render(request, 'GastApp/stats.html', context)
 
-        Budget.objects.create(category=category, budget=budget)
+        Budget.objects.create(owner=request.user, category=category, amount=budget)
         messages.success(request, 'El presupuesto ha sido guardado con exito')
 
         return redirect('GastApp')
