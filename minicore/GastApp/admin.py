@@ -9,6 +9,8 @@ class GastAppAdmin(admin.ModelAdmin):
     search_fields=('description', 'category', 'date')
     list_per_page=5
 
+
+
 admin.site.register(Expense, GastAppAdmin)
 admin.site.register(Category)
 admin.site.register(Budget)

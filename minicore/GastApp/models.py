@@ -21,6 +21,7 @@ class Expense(models.Model):
 
 class Category(models.Model):
     name=models.CharField(max_length=255)
+        
 
     class Meta:
         verbose_name_plural='Categories'

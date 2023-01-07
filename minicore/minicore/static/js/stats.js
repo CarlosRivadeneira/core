@@ -41,9 +41,11 @@ const renderChart = (data, labels) => {
 const getChartData = () => {
   let valst;
   let budg=0;
+  let valu;
   fetch("/inicio-bdg")
   .then((rest) => rest.json())
   .then((values) => {
+    valu=values
     console.log("values", values);
     const [vals] = [Object.values(values)];
       console.log(vals[0].amount);
@@ -69,24 +71,32 @@ const getChartData = () => {
 
       let art=``;
       let div=``;
-      let av=``;
       let perc=``;
+      let tot;
       labels.forEach((y,index)=>{
-        console.log(data[index])
+        tot = valst - data[index] 
+        console.log(data[index]);
         console.log(valst);
-        perc = (data[index] * 100) / valst
+        perc = (data[index] * 100) / valst;
         console.log(perc)
-        if (data[index] > 4)
-          av+=`
-          <div class="feature col">
-          <p>Sobrepasa el presupuesto</p>
-          </div>
-          `;
-        else
-          av+=`
-          <div class="feature col">
-          <p>Se encuentra dentro del presupuesto
-          </div>
+        if (valu.length === 0){
+          vbocategory.innerHTML = art;
+          }
+        else 
+          if ((data[index]) < valst)
+            art=`
+            <h5> Presupuesto excedente </h5>
+            <p> El porcentaje que ocupa el gasto es del: ${perc.toFixed(2)}%</p>
+            `;
+          else if ((data[index]) > valst)
+          art=`
+          <h5> Limite superado </h5>
+          <p> El porcentaje que sobrepasa al presupuesto fijado es de: ${(perc-100).toFixed(2)}%</p>
+          `;  
+          else
+          art=`
+          <h5> Valor limite de presupuesto </h5>
+          <p> El valor de la cantidad de gastos sumados y el presupuestado es el mismo</p>
           `;
         div+=`
         <div class="feature col">
@@ -94,21 +104,15 @@ const getChartData = () => {
             <svg class="bi" width="1em" height="1em"><use xlink:href="#collection"></use></svg>
           </div>
           <h2>${y}</h2>
-          <p>${data[index]}</p>
+          <p>La suma total de gastos en esta categoria es: ${data[index]}</p>
+          ${art}
         </div>
         `;
-        if ((data[index]) < valst)
-          art+=`
-          <p> Se puede </p>
-          `;
-        else
-          art+=`
-          <p> No se puede </p>
-          `;
       });
-      vbocategory.innerHTML = art;
-      cbcb.innerHTML = av;
-      cbocategory.innerHTML = div;
+      cbocategory.innerHTML += div;
+      art=` `;
+      console.log(art)
+      renderCharts(tot)
     });
 };
 
