@@ -112,7 +112,6 @@ const getChartData = () => {
       cbocategory.innerHTML += div;
       art=` `;
       console.log(art)
-      renderCharts(tot)
     });
 };
 

@@ -39,7 +39,36 @@ def inicio(request):
 def inicio_bdg(request):
     budgets = Budget.objects.filter(owner=request.user)
     val = budgets.values()
+    print(val)
+    
     return JsonResponse(list(val), safe=False)
+
+def valor(request):
+    expenses = Expense.objects.filter(
+        owner=request.user)
+    budgets = Budget.objects.filter(owner=request.user)
+    val = list(budgets.values())
+    finalrep = {}
+
+    def get_category(expense):
+        return expense.category
+
+    category_list = list(set(map(get_category, expenses)))
+
+    def get_expense_category_amount(category):
+        amount = 0
+        filtered_by_category = expenses.filter(category=category)
+
+        for item in filtered_by_category:
+            amount += item.amount
+
+        return amount
+
+    for x in expenses:
+        for y in category_list:
+            finalrep[y] = get_expense_category_amount(y)
+
+    
 
 
 @login_required(login_url='/authentication/login')
